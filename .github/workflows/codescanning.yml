@@ -50,13 +50,13 @@ jobs:
           #queries: security-extended
           #packs: +codeql/java-queries:experimental/Security/CWE/CWE-020/Log4jJndiInjection.ql
           
-      - if: ${{ matrix.language=!= 'python'  || matrix.language=!= 'javascript' }}     
+      - if: ${{ matrix.language == 'python'  || matrix.language == 'javascript' }}     
         name: Setup Node for Python or JS Only
         uses: actions/setup-node@v4
         with:
           node-version: 18
 
-      - if: ${{ matrix.language=!= 'python'  || matrix.language=!= 'javascript' }} 
+      - if: ${{ matrix.language == 'python'  || matrix.language == 'javascript' }} 
         name: Autobuild for Python or JS Only
         uses: github/codeql-action/autobuild@v2
       
