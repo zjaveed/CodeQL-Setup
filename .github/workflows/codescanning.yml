@@ -31,12 +31,9 @@ jobs:
     steps:
       - name: Checkout Source
         uses: actions/checkout@v4
-      - name: Setup Node  
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
+    
       - if: ${{ matrix.language == 'java' }}
-        name: Set up JDK
+        name: Set up JDK for Java Code
         uses: actions/setup-java@v3
         with:
           java-version: 11
@@ -53,8 +50,14 @@ jobs:
           #queries: security-extended
           #packs: +codeql/java-queries:experimental/Security/CWE/CWE-020/Log4jJndiInjection.ql
           
-      - if: ${{ matrix.language != 'java' }}     #languages: java
-        name: Autobuild
+      - if: ${{ matrix.language=!= 'python'  || matrix.language=!= 'javascript' }}     
+        name: Setup Node for Python or JS Only
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - if: ${{ matrix.language=!= 'python'  || matrix.language=!= 'javascript' }} 
+        name: Autobuild for Python or JS Only
         uses: github/codeql-action/autobuild@v2
       
       # We are using a custom build step to have greater control over the build process over using autobuild
@@ -63,7 +66,7 @@ jobs:
         run: echo ${{ matrix.language }}
         
       - if: ${{ matrix.language == 'java' }}
-        name: Custom Build Step
+        name: Custom Build Step for Compiled Langugage
         run: mvn compile -B
         shell: bash
 
