@@ -63,6 +63,7 @@ jobs:
         run: echo ${{ matrix.language }}
         
       - if: ${{ matrix.language == 'java' }}
+        name: Custom Build Step
         run: mvn compile -B
         shell: bash
 
