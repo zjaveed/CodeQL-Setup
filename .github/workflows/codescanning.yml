@@ -58,10 +58,10 @@ jobs:
         uses: github/codeql-action/autobuild@v2
       
       # We are using a custom build step to have greater control over the build process over using autobuild
-      - name: Custom Build Step
+      #- name: Custom Build Step
       - if: ${{ matrix.java }}
         run: mvn compile -B
-        # shell: bash
+        shell: bash
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v2
