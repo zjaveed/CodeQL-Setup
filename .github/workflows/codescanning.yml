@@ -44,15 +44,17 @@ jobs:
           distribution: microsoft
           # Using the integrated cache functionality to speed up builds
           cache: maven
-
+      
       - if: ${{ matrix.language == 'python'  || matrix.language == 'javascript' }}
         name: Initialize CodeQL Scanning for Interpreter Languages
         uses: github/codeql-action/init@v2
         with:
           languages: ${{ matrix.language }}
-          #config-file: ./.github/codeql/codeql-config.yml
-          #queries: security-extended
-          #packs: +codeql/java-queries:experimental/Security/CWE/CWE-020/Log4jJndiInjection.ql
+          config: |
+            paths-ignore:
+              - /data/static/codefixes/*.ts
+    
+       
           
       - if: ${{ matrix.language == 'python'  || matrix.language == 'javascript' }}     
         name: Setup Node for Python or JS Only
@@ -63,6 +65,7 @@ jobs:
       - if: ${{ matrix.language == 'python'  || matrix.language == 'javascript' }} 
         name: Autobuild for Python or JS Only
         uses: github/codeql-action/autobuild@v2
+        
       
       # We are using a custom build step to have greater control over the build process over using autobuild
       #- name: Custom Build Step
