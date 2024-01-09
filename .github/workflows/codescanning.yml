@@ -35,8 +35,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18
-      
-      - name: Set up JDK
+      - if: ${{ matrix.language == 'java' }}
+        name: Set up JDK
         uses: actions/setup-java@v3
         with:
           java-version: 11
@@ -53,8 +53,8 @@ jobs:
           #queries: security-extended
           #packs: +codeql/java-queries:experimental/Security/CWE/CWE-020/Log4jJndiInjection.ql
           
-          #languages: java
-      - name: Autobuild
+      - if: ${{ matrix.language != 'java' }}     #languages: java
+        name: Autobuild
         uses: github/codeql-action/autobuild@v2
       
       # We are using a custom build step to have greater control over the build process over using autobuild
