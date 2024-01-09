@@ -29,6 +29,9 @@ jobs:
     
     
     steps:
+      - name: Code Language 
+        run: echo ${{ matrix.language }}
+        
       - name: Checkout Source
         uses: actions/checkout@v4
     
@@ -42,7 +45,8 @@ jobs:
           # Using the integrated cache functionality to speed up builds
           cache: maven
 
-      - name: Initialize CodeQL Scanning
+      - if: ${{ matrix.language == 'python'  || matrix.language == 'javascript' }}
+        name: Initialize CodeQL Scanning for Interpreter Languages
         uses: github/codeql-action/init@v2
         with:
           languages: ${{ matrix.language }}
@@ -62,9 +66,15 @@ jobs:
       
       # We are using a custom build step to have greater control over the build process over using autobuild
       #- name: Custom Build Step
-      - name: Print Matrix Value
-        run: echo ${{ matrix.language }}
-        
+      - if: ${{ matrix.language == 'java' }}
+        name: Initialize CodeQL Scanning for Java
+        uses: github/codeql-action/init@v2
+        with:
+          languages: ${{ matrix.language }}
+          #config-file: ./.github/codeql/codeql-config.yml
+          queries: security-extended
+          packs: +codeql/java-queries:experimental/Security/CWE/CWE-020/Log4jJndiInjection.ql
+          
       - if: ${{ matrix.language == 'java' }}
         name: Custom Build Step for Compiled Langugage
         run: mvn compile -B
