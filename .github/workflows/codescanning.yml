@@ -59,7 +59,10 @@ jobs:
       
       # We are using a custom build step to have greater control over the build process over using autobuild
       #- name: Custom Build Step
-      - if: ${{ matrix.java }}
+      - name: Print Matrix Value
+        run: echo ${{ matrix.language }}
+        
+      - if: ${{ matrix.language == 'java' }}
         run: mvn compile -B
         shell: bash
 
