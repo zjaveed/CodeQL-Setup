@@ -23,6 +23,7 @@ build/
 cache/
 dist/
 logs/
+target/
 vagrant/.vagrant/
 *.orig
 *.out
